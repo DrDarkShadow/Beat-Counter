@@ -20,12 +20,16 @@
             <input type="number" id="bpm" placeholder="e.g. 180" required>
         </div>
 
-        <button id="startButton">Start</button>
-        <button id="stopButton">Stop / Resume</button>
+        <button id="startButton">Start Counter</button>
+        <button id="stopButton">Stop Counter</button>
         <button id="clearButton">Clear</button>
 
         <div id="counter">Avartan -----> 0</div>
         <div id="beatCount">Counting beat: 0</div>
+
+        <h2>Identify BPM by Clicks</h2>
+        <p>Click to record a beat. Current BPM: <span id="calculatedBPM">0</span></p>
+        <button id="clickButton">Click Here</button>
     </div>
 
     <audio id="beatSound" src="beat_sound.mp3" preload="auto"></audio> <!-- Add your sound file here -->
