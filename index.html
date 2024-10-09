@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Beat Counter</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Beat Counter</h1>
+
+        <div class="input-group">
+            <label for="beats"><strong>Maatra (No. of Beats):</strong></label>
+            <input type="number" id="beats" placeholder="e.g. 12" required>
+        </div>
+
+        <div class="input-group">
+            <label for="bpm"><strong>Enter BPM (beats per minute):</strong></label>
+            <input type="number" id="bpm" placeholder="e.g. 180" required>
+        </div>
+
+        <button id="startButton">Start</button>
+        <button id="stopButton">Stop / Resume</button>
+        <button id="clearButton">Clear</button>
+
+        <div id="counter">Avartan -----> 0</div>
+        <div id="beatCount">Counting beat: 0</div>
+    </div>
+
+    <audio id="beatSound" src="beat_sound.mp3" preload="auto"></audio> <!-- Add your sound file here -->
+    <script src="script.js"></script>
+</body>
+</html>
