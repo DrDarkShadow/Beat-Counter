@@ -1,9 +1,9 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: url('https://w0.peakpx.com/wallpaper/533/613/HD-wallpaper-tabla-music.jpg'); /* Background image */
-    background-size: cover; /* Ensure the image covers the entire background */
-    background-position: center center; /* Center the image */
-    background-repeat: no-repeat; /* Prevent the image from repeating */
+    background-image: url('https://w0.peakpx.com/wallpaper/533/613/HD-wallpaper-tabla-music.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
     color: #333;
     display: flex;
     justify-content: center;
@@ -11,41 +11,292 @@ body {
     height: 100vh;
     margin: 0;
 }
+.counter-container {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between counters */
+    margin-bottom: 20px; /* Space below the counters */
+}
+
+.counter {
+    font-size: 28px; /* Set same text size for both counters */
+    font-weight: bold; /* Ensure both are bold */
+    width: 45%; /* Each counter takes half the space */
+    text-align: center; /* Center align text */
+}
+
+#beatCount, #counter {
+    font-size: 28px; /* Ensure both counters have the same font size */
+    color: #333; /* Dark color for better readability */
+    margin: 0; /* Remove any default margin */
+    padding: 0; /* Remove any default padding */
+}
+#soundToggleContainer {
+    position: absolute; /* Use absolute positioning */
+    bottom: 20px; /* Distance from the bottom */
+    right: 20px; /* Distance from the right */
+}
+
+.sound-toggle {
+    background-color: rgb(255, 255, 255); 
+    border: 1px solid rgb(187, 187, 187); 
+    border-radius: 4px;
+    color: rgb(85, 85, 85); 
+    font-size: 22px;
+    height: 40px; /* Adjusted height */
+    transition: background-color 0.4s, color 0.4s;
+    cursor: pointer; /* Hand cursor on hover */
+    width: 100px; /* Adjust width for better visibility */
+    text-align: center; /* Center the text inside the button */
+    font-weight: normal;
+}
+
+.sound-toggle:hover {
+    background-color: rgb(114, 172, 81);
+    border: 1px solid rgb(114, 172, 81);
+    color: rgb(255, 255, 255); 
+}
+
+.sound-toggle {
+    background-color: rgb(255, 255, 255); 
+    border: 1px solid rgb(187, 187, 187); 
+    border-radius: 4px;
+    color: rgb(85, 85, 85); 
+    font-size: 22px; /* Font size for the button text */
+    height: 50px; /* Increased height for better click area */
+    width: 120px; /* Increased width for better visibility */
+    transition: background-color 0.4s, color 0.4s;
+    cursor: pointer; /* Hand cursor on hover */
+    text-align: center; /* Center the text inside the button */
+    font-weight: normal;
+    padding: 10px; /* Added padding for better spacing */
+}
+
+.sound-toggle:hover {
+    background-color: rgb(114, 172, 81);
+    border: 1px solid rgb(114, 172, 81);
+    color: rgb(255, 255, 255); 
+}
+
+
+.beat-count-box, .avartan-box {
+    display: flex; /* Use flexbox for alignment */
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center items */
+    padding: 15px; /* Padding inside the box */
+    background-color: #f0f0f0; /* Light gray background */
+    border: 1px solid #ccc; /* Border around the box */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    width: 200px; /* Fixed width for the box */
+}
+
+.label {
+    font-weight: bold; /* Bold labels for emphasis */
+    margin-bottom: 5px; /* Space between label and value */
+}
+
+
+
 
 .container {
-    background: rgba(255, 255, 255, 0.8); /* Slightly transparent background for better visibility */
+    background: rgba(248, 248, 248, 0.8); /* Slight background for better readability */
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     text-align: center;
+    width: 90%;
+    max-width: 600px;
+    position: relative; /* Added relative positioning */
 }
+
 
 h1 {
     margin-bottom: 20px;
 }
 
-input {
+.tempo-label {
+    cursor: pointer; /* Change cursor to pointer to indicate editability */
+    font-size: 20pxpx; /* Same font size *//* If needed */
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="number"] {
     margin: 10px 0;
     padding: 10px;
     width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+input[type="number"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#counter {
+    margin-top: 20px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.play-button, .tap-button {
+    background-color: rgb(255, 255, 255); 
+    border: 1px solid rgb(187, 187, 187); 
+    border-radius: 4px;
+    color: rgb(85, 85, 85); 
+    font-size: 22px;
+    height: 40px; /* Adjusted height */
+    transition: background-color 0.4s, color 0.4s;
+    cursor: pointer; /* Hand cursor on hover */
+    width: 30%; /* Full width for buttons */
+    margin: 8px auto; /* Margin for spacing */
+    text-align: center; /* Center the text inside the buttons */
+    font-weight: normal;
+}
+
+.play-button:hover {
+    background-color: rgb(114, 172, 81);
+    border: 1px solid rgb(114, 172, 81);
+    color: rgb(255, 255, 255); 
+}
+
+.tap-button:hover {
+    background-color: rgb(114, 172, 81);
+    border: 1px solid rgb(114, 172, 81);
+    color: rgb(255, 255, 255);
+}
+.slider-container {
+    display: flex; /* Align elements in a row */
+    align-items: center; /* Center items vertically */
+    margin-top: 20px; /* Space above the slider */
+}
+
+input[type="range"] {
+    margin: 0 10px; /* Space between the label and buttons */
+    width: 200px; /* Width of the slider */
 }
 
 button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-    margin: 5px; /* Added margin for better spacing */
+    padding: 5px 10px; /* Padding for buttons */
+    cursor: pointer; /* Change cursor to pointer */
 }
 
-button:hover {
-    background-color: #0056b3;
+.bubble-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; /* Make sure bubbles wrap */
+    margin: 20px 0; /* Adjust this for space above and below bubbles */
+    gap: 10px; /* Space between bubbles */
 }
 
-#counter, #beatCount {
-    margin-top: 20px;
-    font-size: 24px;
-    font-weight: bold;
+.bubble {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: white;
+    margin: 5px;
+    display: inline-block;
+    transition: background-color 0.2s ease;
+}
+
+.bubble.active {
+    background-color: green; /* Color for the active bubble */
+}
+
+.bubble:hover {
+    background-color: #72ac51; /* Highlight color on hover */
+}
+
+input[type="range"] {
+    -webkit-appearance: none; /* Remove default styling */
+    width: 400px; /* Full width */
+    height: 9px; /* Track height */
+    background: none 0% 0% / auto repeat scroll padding-box border-box white; /* Track color set to white */
+    border-radius: 5px; /* Rounded track */
+}
+
+/* Slider thumb styling for webkit browsers */
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; /* Remove default styling */
+    appearance: none;
+    width: 24px; /* Width of the thumb */
+    height: 24px; /* Height of the thumb */
+    border-radius: 50%; /* Rounded thumb */
+    background: #72ac51; /* Green thumb color */
+    cursor: pointer; /* Pointer on hover */
+}
+
+/* Slider thumb styling for Firefox */
+input[type="range"]::-moz-range-thumb {
+    width: 24px; /* Width of the thumb */
+    height: 24px; /* Height of the thumb */
+    border-radius: 50%; /* Rounded thumb */
+    background: #72ac51; /* Green thumb color */
+    cursor: pointer; /* Pointer on hover */
+}
+
+#__cssPicker__root {
+    display: flex; /* Enable flexbox */
+    justify-content: center; /* Center items horizontally */
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center align items vertically */
+/* Make the font bold */
+}
+
+input[type="submit"], button {
+    appearance: none;
+    padding: 15px;
+}
+
+.tempo-decrease, .tempo-increase {
+    margin-right: 20px;
+    margin-left: 20px;
+    border: 1px solid rgb(204, 204, 204);
+    border-radius: 20px;
+    color: rgb(51, 51, 51);
+    display: flex;
+    height: 40px;
+    transition: 0.07s;
+    user-select: none;
+    width: 40px; /* Set fixed width for the buttons */
+    background-color: white; /* White background */
+    cursor: pointer; /* Hand cursor on hover */
+}
+
+.tempo-decrease:hover, .tempo-increase:hover {
+    background-color: #72ac51; /* Highlight color on hover */
+}
+
+button {
+    align-items: center;
+    background: transparent; /* Background for buttons */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer on hover */
+    display: flex; /* Center the text */
+    justify-content: center; /* Center the text */
+    outline: none; /* Remove outline */
+}
+
+.metronome, button {
+    user-select: none; /* Prevent text selection */
+}
+
+.tempo-label {
+    color: rgb(85, 85, 85);
+    font-size: 32px; /* Font size for the BPM label */
+    padding-top: 10px; /* Padding to space it from the slider */
+}
+
+@media screen and (max-width: 480px) {
+    .tempo-decrease, .tempo-increase {
+        display: none; /* Hide buttons on small screens */
+    }
 }
