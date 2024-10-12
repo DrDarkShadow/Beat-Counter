@@ -5,9 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Beat Counter</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Include Font Awesome -->
+    <style>
+        /* Additional styles to position the sound toggle container */
+        .sound-toggle-container {
+            position: absolute; /* Allows positioning within the container */
+            bottom: 10px; /* Distance from the bottom */
+            right: 10px; /* Distance from the right */
+        }
+
+        /* Other styles as necessary (not shown here for brevity) */
+    </style>
 </head>
 <body>
-  
+    
     <div class="container">
         <h1>Metronome</h1>
       
@@ -21,12 +32,18 @@
                 <div id="counter">0</div> <!-- Value of the Avartan Counter -->
             </div>
         </div>
-        <!-- Sound On/Off Toggle Button -->
-<!-- Sound On/Off Toggle Button -->
-<div id="soundToggleContainer">
-    <button class="sound-toggle" id="soundToggle"><b>Sound ON</b></button>
-</div>
+        
+        <!-- Sound On/Off Toggle Switch -->
+        <div class="sound-toggle-container">
+            <label class="switch" aria-label="Toggle sound">
+                <input type="checkbox" id="soundToggle" checked> <!-- Checked for default ON -->
 
+                <div class="slider">
+                    <i class="fas fa-volume-up slider-icon" id="volumeIcon" aria-hidden="true"></i> <!-- Volume up icon -->
+                    <i class="fas fa-volume-mute slider-icon" id="muteIcon" aria-hidden="true"></i> <!-- Mute icon -->
+                </div>
+            </label>
+        </div>
 
         <!-- Bubble container -->
         <div class="bubble-container" id="bubbleContainer"></div>
@@ -36,17 +53,16 @@
             <input type="number" id="beats"  required>
         </div>
         
-<div class="input-group">
-    <div style="display: flex; align-items: center; justify-content: center;">
-        <button class="tempo-decrease" id="decreaseBPM">−</button>
-        <input type="range" id="bpmSlider" min="30" max="1000" value="120" class="skipcss" />
-        <button class="tempo-increase" id="increaseBPM">+</button>
-    </div>
-    <div id="__cssPicker__root">
-        <div class="tempo-label" id="bpmLabel">120 BPM</div>
-    </div>
-</div>
-
+        <div class="input-group">
+            <div style="display: flex; align-items: center; justify-content: center;">
+                <button class="tempo-decrease" id="decreaseBPM">−</button>
+                <input type="range" id="bpmSlider" min="30" max="1000" value="120" class="skipcss" />
+                <button class="tempo-increase" id="increaseBPM">+</button>
+            </div>
+            <div id="__cssPicker__root">
+                <div class="tempo-label" id="bpmLabel">120 BPM</div>
+            </div>
+        </div>
 
         <!-- Single START Button -->
         <div id="__cssPicker__root">

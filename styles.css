@@ -11,6 +11,105 @@ body {
     height: 100vh;
     margin: 0;
 }
+
+.sound-toggle-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px; /* Space above the sound toggle */
+}
+
+.sound-label {
+    font-weight: bold;
+    margin-right: 10px; /* Space between label and switch */
+}
+
+/* The switch styles */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 70px; /* Increased width for a larger slider */
+    height: 30px; /* Increased height for a larger slider */
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgb(219, 68, 55); /* Default color (off state) */
+    transition: .4s;
+    border-radius: 40px; /* More rounded corners */
+    display: flex; /* Use flex to center text */
+    align-items: center; /* Center vertically */
+    justify-content: center; /* Center horizontally */
+    color: white; /* Text color */
+    font-weight: bold; /* Bold text */
+}
+
+/* The circle inside the slider */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px; /* Adjusted for a larger circle */
+    width: 26px; /* Adjusted for a larger circle */
+    left: 4px; /* Adjusted to 4px to add padding from the left */
+    bottom: 2px; /* Keep bottom at 2px for vertical centering */
+    background-color: white;
+    border-radius: 50%; /* Round shape */
+    transition: .4s;
+}
+
+/* When the switch is checked */
+input:checked + .slider {
+    background-color: #66bb6a; /* Color when on (green) */
+}
+
+/* Move circle when checked */
+input:checked + .slider:before {
+    transform: translateX(36px); /* Adjusted for the larger slider */
+}
+
+/* Hide icons by default */
+.slider-icon {
+    display: none; /* Hide icons by default */
+}
+
+/* Show the volume up icon when the checkbox is checked */
+input[type="checkbox"]:checked + .slider .fa-volume-mute {
+    display: none; /* Hide volume up icon */
+}
+
+/* Show the volume mute icon when the checkbox is unchecked */
+input[type="checkbox"]:not(:checked) + .slider .fa-volume-up {
+    display: none; /* Hide mute icon */
+}
+
+/* Show the volume up icon when the checkbox is checked */
+input[type="checkbox"]:checked + .slider .fa-volume-up {
+    display: block; /* Show volume up icon */
+    margin-left: -18px; /* Adjust to the left when sound is on */
+}
+
+/* Show the volume mute icon when the checkbox is unchecked */
+input[type="checkbox"]:not(:checked) + .slider .fa-volume-mute {
+    display: block; /* Show mute icon */
+    margin-right: -18px; /* Adjust to the right when sound is off */
+}
+
+/* Ensure icons are centered */
+.slider .slider-icon {
+    transition: margin 0.4s; /* Smooth transition for margin changes */
+}
+
 .counter-container {
     display: flex; /* Use flexbox for layout */
     justify-content: space-between; /* Space between counters */
@@ -116,7 +215,7 @@ h1 {
 
 .tempo-label {
     cursor: pointer; /* Change cursor to pointer to indicate editability */
-    font-size: 20pxpx; /* Same font size *//* If needed */
+    font-size: 20px; /* Same font size *//* If needed */
 }
 
 .input-group {
@@ -216,7 +315,7 @@ button {
 }
 
 input[type="range"] {
-    -webkit-appearance: none; /* Remove default styling */
+    -webkit-appearance: none ; /* Remove default styling */
     width: 400px; /* Full width */
     height: 9px; /* Track height */
     background: none 0% 0% / auto repeat scroll padding-box border-box white; /* Track color set to white */
