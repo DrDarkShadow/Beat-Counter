@@ -10,8 +10,6 @@ const toggleButton = document.getElementById("toggleButton");
 const beatCountDisplay = document.getElementById("beatCount");
 const avartanDisplay = document.getElementById("counter"); // Updated reference for avartan display
 const tapButton = document.getElementById("tapButton");
-const beatSound1 = document.getElementById("beatSound1"); // First metronome sound
-const beatSound2 = document.getElementById("beatSound2"); // Second metronome sound
 const bubbleContainer = document.getElementById("bubbleContainer");
 const maatraInput = document.getElementById("beats");
 const bpmInput = document.getElementById("bpmSlider");
@@ -22,6 +20,12 @@ const increaseBPMButton = document.getElementById("increaseBPM");
 const decreaseBPMButton = document.getElementById("decreaseBPM");
 
 let tapTimes = [];
+
+// Preload audio files
+const beatSound1 = new Audio('metronome1.mp3'); // Replace with your sound file path
+const beatSound2 = new Audio('metronome2.mp3'); // Replace with your sound file path
+beatSound1.preload = 'auto';
+beatSound2.preload = 'auto';
 
 // Event listener for Maatra input change
 maatraInput.addEventListener("change", (e) => {
