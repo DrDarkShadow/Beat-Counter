@@ -14,7 +14,47 @@
             right: 10px; /* Distance from the right */
         }
 
-        /* Other styles as necessary (not shown here for brevity) */
+        /* New styles for updates container */
+        .updates-container {
+            width: 250px; /* Set a width for the updates container */
+            margin-left: 20px; /* Space between the main container and updates container */
+            padding: 10px; /* Padding inside the container */
+            background-color: rgba(249, 249, 249, 0.8); /* Translucent light background color */
+            border: 1px solid #ddd; /* Border around the container */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+            position: absolute; /* Position it on the right */
+            top: 10px; /* Distance from the top */
+            right: 10px; /* Distance from the right */
+            display: none; /* Initially hidden */
+            z-index: 10; /* Ensure it stays on top */
+        }
+
+        /* Header style for updates */
+        .updates-container h2 {
+            font-size: 1.5em; /* Font size for the header */
+            margin-bottom: 10px; /* Space below the header */
+        }
+
+        /* Style for the update items */
+        .update-item {
+            margin-bottom: 8px; /* Space between items */
+            padding: 5px; /* Padding inside each item */
+            background-color: rgba(233, 236, 239, 0.8); /* Slightly darker translucent background for items */
+            border-radius: 3px; /* Rounded corners for items */
+        }
+
+        /* Style for the toggle button */
+        .toggle-button {
+            cursor: pointer; /* Change cursor to pointer */
+            background-color: #007bff; /* Button color */
+            color: white; /* Text color */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px; /* Padding inside the button */
+            font-size: 1em; /* Font size */
+            margin-bottom: 10px; /* Space below the button */
+        }
     </style>
 </head>
 <body>
@@ -50,7 +90,7 @@
 
         <div class="input-group">
             <label for="beats"><strong>Maatra (No. of Beats):</strong></label>
-            <input type="number" id="beats"  required>
+            <input type="number" id="beats" required>
         </div>
         
         <div class="input-group">
@@ -73,10 +113,37 @@
         <div id="__cssPicker__root">
             <button class="tap-button" id="tapButton"><b>TAP TEMPO</b></button>
         </div>
+
+        <!-- Toggle button for updates -->
+        <button class="toggle-button" id="toggleUpdatesButton">Show Updates</button>
+    </div>
+
+    <!-- New updates container -->
+    <div class="updates-container" id="updatesContainer">
+        <h2>New Updates</h2>
+        <div class="update-item">Update 1: New website is created.</div>
+        <div class="update-item">Update 2: Changed the UI.</div>
+        <div class="update-item">Update 3: Added the Sound on/off button.</div>
+        <div class="update-item">Update 4: Changed the Sound button appereance.</div>
+        <div class="update-item">Update 5: Added the show updates button.</div>
+        <div class="update-item">Update 6: On stopping the loop - it stopped at beat 1(sam).</div>
     </div>
 
     <audio id="beatSound1" src="metronome1.mp3" preload="auto"></audio>
     <audio id="beatSound2" src="metronome2.mp3" preload="auto"></audio>
     <script src="script.js"></script>
+    <script>
+        // JavaScript to toggle the updates visibility
+        document.getElementById('toggleUpdatesButton').addEventListener('click', function() {
+            const updatesContainer = document.getElementById('updatesContainer');
+            if (updatesContainer.style.display === 'none' || updatesContainer.style.display === '') {
+                updatesContainer.style.display = 'block'; // Show updates
+                this.textContent = 'Hide Updates'; // Change button text
+            } else {
+                updatesContainer.style.display = 'none'; // Hide updates
+                this.textContent = 'Show Updates'; // Change button text
+            }
+        });
+    </script>
 </body>
 </html>
