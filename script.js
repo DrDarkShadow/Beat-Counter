@@ -112,8 +112,8 @@ function startBeat() {
             resetBeatCounter(); // Reset beat count for the next avartan
         }
 
-        // Check if stop was requested and it's the last beat in the avartan
-        if (stopRequested && beatCount === maatra) {
+        // Check if stop was requested and it's the first beat in the avartan
+        if (stopRequested && beatCount === 1) {
             avartanCount++; // Increment avartan count when completing the last cycle before stopping
             avartanDisplay.textContent = avartanCount; // Update the display
 
@@ -165,106 +165,88 @@ bpmInput.addEventListener("input", () => {
     bpm = parseInt(bpmInput.value, 10); // Get value from slider
     bpmLabel.textContent = `${bpm} BPM`; // Update BPM label
     if (isPlaying) {
-        startBeat(); // Restart the beat to apply new BPM
+        updateBeatInterval(); // Update the beat interval without restarting
     }
 });
 
-// Add event listener for the increase button
-increaseBPMButton.addEventListener("click", () => {
-    if (bpm < 1000) { // Ensure the BPM does not exceed 1000
-        bpm += 1; // Increase BPM by 1
-        bpmInput.value = bpm; // Update slider value
-        bpmLabel.textContent = `${bpm} BPM`; // Update BPM label
-        if (isPlaying) {
-            startBeat(); // Restart the beat to apply new BPM
+// Function to update the beat interval based on current BPM
+function updateBeatInterval() {
+    clearInterval(beatInterval); // Clear the existing interval
+    beatInterval = setInterval(() => {
+        // Increment beat count
+        beatCount++;
+
+        // Play the appropriate sound based on the beat count
+        if (beatCount % maatra === 1) { // Check if the beat count is 1
+            if (soundOn) {
+                beatSound1.currentTime = 0; // Reset sound time for the first beat
+                beatSound1.play(); // Play first metronome sound
+            }
+        } else {
+            if (soundOn) {
+                beatSound2.currentTime = 0; // Reset sound time for the other beats
+                beatSound2.play(); // Play second metronome sound
+            }
         }
-    }
-});
 
-// Add event listener for the decrease button
-decreaseBPMButton.addEventListener("click", () => {
-    if (bpm > 30) { // Ensure the BPM does not go below 30
-        bpm -= 1; // Decrease BPM by 1
-        bpmInput.value = bpm; // Update slider value
-        bpmLabel.textContent = `${bpm} BPM`; // Update BPM label
-        if (isPlaying) {
-            startBeat(); // Restart the beat to apply new BPM
+        // Update the beat count display and bubbles
+        if (beatCount <= maatra) {
+            beatCountDisplay.textContent = beatCount; // Display the beat count (starts from 1)
+            updateBubbles(); // Update bubbles on each beat
         }
-    }
-});
 
-// Event listener for tap tempo
-tapButton.addEventListener("click", () => {
-    const now = Date.now();
-    tapTimes.push(now);
-
-    if (tapTimes.length > 5) {
-        tapTimes.shift(); // Keep only the last 5 taps
-    }
-
-    if (tapTimes.length >= 2) {
-        const intervals = [];
-        for (let i = 1; i < tapTimes.length; i++) {
-            intervals.push(tapTimes[i] - tapTimes[i - 1]);
+        // Check if we reached the number of beats in an avartan
+        if (beatCount > maatra) {
+            avartanCount++;
+            avartanDisplay.textContent = avartanCount; // Update avartan display
+            resetBeatCounter(); // Reset beat count for the next avartan
         }
-        beatSound2.currentTime = 0; // Reset sound to start
-        if (soundOn) {
-            beatSound2.play(); // Play sound 2
+
+        // Check if stop was requested and it's the first beat in the avartan
+        if (stopRequested && beatCount === 1) {
+            avartanCount++; // Increment avartan count when completing the last cycle before stopping
+            avartanDisplay.textContent = avartanCount; // Update the display
+
+            clearInterval(beatInterval); // Stop after completing the current loop
+            isPlaying = false; // Update the playing state
+            stopRequested = false; // Reset the stop request flag
+            beatCountDisplay.textContent = '--'; // Show '--' when stopped
         }
-        // Calculate average BPM
-        const avgInterval = intervals.reduce((a, b) => a + b) / intervals.length;
-        bpm = Math.round(60000 / avgInterval); // Convert to BPM
-        bpmInput.value = bpm; // Update BPM slider
-        bpmLabel.textContent = `${bpm} BPM`; // Update BPM label
-        if (isPlaying) {
-            startBeat(); // Restart the beat to apply new BPM
-        }
-    }
-});
-
-// Add click event listener to BPM label for editing
-bpmLabel.addEventListener("click", () => {
-    const input = document.createElement("input");
-    input.type = "number";
-    input.value = bpm;
-
-    // Copy the styles directly from the BPM label
-    const computedStyle = getComputedStyle(bpmLabel);
-    input.style.fontSize = computedStyle.fontSize; // Keep the same font size
-    input.style.color = computedStyle.color; // Keep the same text color
-    input.style.fontFamily = computedStyle.fontFamily; // Keep the same font family
-    input.style.border = "none"; // Remove borders
-    input.style.width = "60px"; // Set a width for the input
-    input.style.textAlign = "center"; // Center align text
-    input.style.outline = "none"; // Remove outline
-    input.style.backgroundColor = "transparent"; // Make the background transparent
-
-    // Replace the label with the input field
-    bpmLabel.innerHTML = ''; // Clear the label content
-    bpmLabel.appendChild(input); // Add the input to the label
-
-    // Focus and select the input text
-    input.focus();
-    input.select();
-
-    // On blur or enter, update the BPM and revert to the label
-    input.addEventListener("blur", () => updateBPM(input.value));
-    input.addEventListener("keydown", (event) => {
-        if (event.key === "Enter") {
-            updateBPM(input.value);
-        }
-    });
-});
-
-// Function to update BPM value and revert to label
-function updateBPM(newValue) {
-    bpm = Math.max(30, Math.min(1000, newValue)); // Ensure BPM is within bounds
-    bpmLabel.textContent = `${bpm} BPM`; // Update BPM label
-    bpmInput.value = bpm; // Sync slider value
-    if (isPlaying) {
-        startBeat(); // Restart the beat to apply new BPM
-    }
+    }, (60000 / bpm)); // Interval based on BPM
 }
 
-// Initial display of BPM
-bpmLabel.textContent = `${bpm} BPM`; // Set initial BPM label
+// Event listeners for the + and - buttons
+increaseBPMButton.addEventListener("click", () => {
+    bpm++;
+    bpmInput.value = bpm; // Update slider
+    bpmLabel.textContent = `${bpm} BPM`; // Update label
+    if (isPlaying) {
+        updateBeatInterval(); // Update the beat interval without restarting
+    }
+});
+
+decreaseBPMButton.addEventListener("click", () => {
+    if (bpm > 1) { // Prevent BPM from going below 1
+        bpm--;
+        bpmInput.value = bpm; // Update slider
+        bpmLabel.textContent = `${bpm} BPM`; // Update label
+        if (isPlaying) {
+            updateBeatInterval(); // Update the beat interval without restarting
+        }
+    }
+});
+
+// Function to handle tap input
+tapButton.addEventListener("click", () => {
+    const tapTime = Date.now();
+    tapTimes.push(tapTime);
+    if (tapTimes.length > 1) {
+        const interval = tapTimes[tapTimes.length - 1] - tapTimes[tapTimes.length - 2];
+        bpm = Math.round(60000 / interval);
+        bpmInput.value = bpm; // Update slider
+        bpmLabel.textContent = `${bpm} BPM`; // Update label
+        if (isPlaying) {
+            updateBeatInterval(); // Update the beat interval without restarting
+        }
+    }
+});
