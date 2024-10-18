@@ -324,6 +324,20 @@ button {
     gap: 10px; /* Space between bubbles */
 }
 
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    outline: none; /* Remove outline */
+    border: none; /* Remove border */
+    -moz-appearance: textfield; /* Firefox */
+    font-size: inherit; /* Keep the same font size */
+    color: inherit; /* Keep the same text color */
+}
+
 .bubble {
     width: 30px;
     height: 30px;
@@ -432,6 +446,9 @@ button {
     font-weight: bold; /* Make text bold */
     color: rgb(85, 85, 85); /* Text color */
     margin: 10px; /* Margin for spacing */
+}
+#bpmLabel:focus {
+    outline: none; /* Ensure no outline on focus */
 }
 
 #bpmLabel input {

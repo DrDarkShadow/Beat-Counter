@@ -53,6 +53,7 @@ maatraInput.addEventListener("change", (e) => {
     createBubbles();
 });
 
+
 // Function to handle toggle button click/touch for mobile
 function toggleBeat() {
     if (isPlaying) {
