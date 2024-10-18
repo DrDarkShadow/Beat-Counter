@@ -53,8 +53,7 @@ maatraInput.addEventListener("change", (e) => {
     createBubbles();
 });
 
-
-// Function to handle toggle button click/touch for mobile
+// Function to handle toggle button click
 function toggleBeat() {
     if (isPlaying) {
         stopRequested = true;
@@ -71,9 +70,8 @@ function toggleBeat() {
     }
 }
 
-// Attach both click and touchstart events for toggleButton
+// Attach click event for toggleButton
 toggleButton.addEventListener("click", toggleBeat);
-toggleButton.addEventListener("touchstart", toggleBeat); // Added for mobile
 
 let soundOn = true;
 
@@ -83,9 +81,6 @@ function toggleSound() {
     soundButton.innerHTML = soundOn ? "<b>Sound ON</b>" : "<b>Sound OFF</b>";
 }
 
-// Attach click and touchstart to sound toggle
-document.getElementById("soundToggle").addEventListener("click", toggleSound);
-document.getElementById("soundToggle").addEventListener("touchstart", toggleSound); // Added for mobile
 function startBeat() {
     clearInterval(beatInterval);
     beatCount = 0;
@@ -119,7 +114,6 @@ function startBeat() {
 
         if (stopRequested) {
             if (beatCount === 1) { // Check if on the first beat of the next cycle
-    
                 avartanDisplay.textContent = avartanCount;
                 clearInterval(beatInterval);
                 isPlaying = false;
@@ -129,11 +123,14 @@ function startBeat() {
         }
     }, (60000 / bpm));
 }
+
 function resetBeatCounter() {
     beatCount = 1;
     beatCountDisplay.textContent = beatCount;
     updateBubbles();
-}function createBubbles() {
+}
+
+function createBubbles() {
     bubbleContainer.innerHTML = '';
     for (let i = 0; i < maatra; i++) {
         const bubble = document.createElement("div");
@@ -143,9 +140,11 @@ function resetBeatCounter() {
 }
 const defaultBubbleCount = 12; // Set your default number of bubbles here
 let bubbleCount = defaultBubbleCount; // Initialize with the default count
+
 document.addEventListener('DOMContentLoaded', () => {
     createBubbles(bubbleCount);
 });
+
 function updateBubbles() {
     const bubbles = bubbleContainer.getElementsByClassName("bubble");
     if (bubbles.length > 0) {
@@ -163,12 +162,9 @@ function updateBubbles() {
     }
 }
 
-// Attach both click and touchstart events for BPM buttons
+// Attach click events for BPM buttons
 increaseBPMButton.addEventListener("click", increaseBPM);
-increaseBPMButton.addEventListener("touchstart", increaseBPM); // Added for mobile
-
 decreaseBPMButton.addEventListener("click", decreaseBPM);
-decreaseBPMButton.addEventListener("touchstart", decreaseBPM); // Added for mobile
 
 function increaseBPM() {
     bpm++;
@@ -190,9 +186,8 @@ function decreaseBPM() {
     }
 }
 
-// Attach both click and touchstart events for tap button
+// Attach click event for tap button
 tapButton.addEventListener("click", tapTempo);
-tapButton.addEventListener("touchstart", tapTempo); // Added for mobile
 
 function tapTempo() {
     const tapTime = Date.now();
@@ -261,15 +256,15 @@ bpmLabel.addEventListener("click", () => {
 
 // Handle BPM slider changes
 bpmInput.addEventListener("input", () => {
-    bpm = Math.max(30, Math.min(1000, parseInt(bpmInput.value, 10)));// Update BPM from input value
+    bpm = Math.max(30, Math.min(1000, parseInt(bpmInput.value, 10))); // Update BPM from input value
     bpmLabel.textContent = `${bpm} BPM`; // Update label text
     if (isPlaying) {
         updateBeatInterval(); // Update interval if playing
     }
 });
 
-// Function to update the beat interval
+// Update beat interval based on the current BPM
 function updateBeatInterval() {
     clearInterval(beatInterval); // Clear the existing interval
-    startBeat(); // Restart the beat with the updated BPM
+    startBeat(); // Restart the beat with the new BPM
 }
