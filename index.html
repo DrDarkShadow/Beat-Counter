@@ -10,8 +10,8 @@
         /* Additional styles to position the sound toggle container */
         .sound-toggle-container {
             position: absolute; /* Allows positioning within the container */
-            bottom: 10px; /* Distance from the bottom */
-            right: 10px; /* Distance from the right */
+            bottom: 15px; /* Distance from the bottom */
+            right: 15px; /* Distance from the right */
         }
 
         /* New styles for updates container */
@@ -47,20 +47,21 @@
         /* Style for the toggle button */
         .toggle-button {
             cursor: pointer; /* Change cursor to pointer */
-            background-color: #007bff; /* Button color */
+            background-color: #4c7d67; /* Button color */
             color: white; /* Text color */
             border: none; /* Remove border */
             border-radius: 5px; /* Rounded corners */
             padding: 10px; /* Padding inside the button */
             font-size: 1em; /* Font size */
-            margin-bottom: 10px; /* Space below the button */
+            margin-bottom: -8px; /* Space below the button */
         }
     </style>
 </head>
 <body>
     
     <div class="container">
-        <h1>Metronome</h1>
+
+        <!-- Beat and Avartan Counters -->
       
         <div class="counter-container">
             <div class="counter">
@@ -94,19 +95,19 @@
         </div>
         
         <div class="input-group">
-            <div style="display: flex; align-items: center; justify-content: center;">
+            <div class="bpm-control" style="display: flex; align-items: center; justify-content: center;">
                 <button class="tempo-decrease" id="decreaseBPM">−</button>
                 <input type="range" id="bpmSlider" min="30" max="1000" value="120" class="skipcss" />
                 <button class="tempo-increase" id="increaseBPM">+</button>
             </div>
             <div id="__cssPicker__root">
-                <div class="tempo-label" id="bpmLabel">120 BPM</div>
+                <div id="bpmLabel" style="cursor: pointer;">120 BPM</div>
             </div>
         </div>
 
         <!-- Single START Button -->
         <div id="__cssPicker__root">
-            <button class="play-button" id="toggleButton"><b>START</b></button>
+            <button class="toggle-butto start" id="toggleButton"><b>START</b></button>
         </div>
 
         <!-- TAP TEMPO Button below START Button with same size -->
@@ -128,6 +129,9 @@
         <div class="update-item">5: Bug Fixed - Starting delay</div>
         <div class="update-item">6: Added the show updates button.</div>
         <div class="update-item">7: On stopping the loop - it stopped at beat 1(sam).</div>
+        <div class="update-item">8: Click to edit bpm</div>
+        <div class="update-item">9. Optimized for mobile devices(audio and visuals)</div>
+        <div class="update-item">10.Changed Visuals (Start button)</div>
     </div>
 
     <audio id="beatSound1" src="metronome1.mp3" preload="auto"></audio>

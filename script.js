@@ -1,252 +1,274 @@
 let isPlaying = false;
-let stopRequested = false; // Flag to track stop request
-let beatCount = 0; // Start with 0 to display '--' initially
-let bpm = 120; // Default BPM
-let avartanCount = 0; // Avartan counter
-let maatra = 12; // Default number of beats in one Avartan
+let stopRequested = false;
+let beatCount = 0;
+let bpm = 120;
+let avartanCount = 0;
+let maatra = 6;
 let beatInterval;
 
 const toggleButton = document.getElementById("toggleButton");
 const beatCountDisplay = document.getElementById("beatCount");
-const avartanDisplay = document.getElementById("counter"); // Updated reference for avartan display
+const avartanDisplay = document.getElementById("counter");
 const tapButton = document.getElementById("tapButton");
 const bubbleContainer = document.getElementById("bubbleContainer");
 const maatraInput = document.getElementById("beats");
 const bpmInput = document.getElementById("bpmSlider");
-const bpmLabel = document.getElementById("bpmLabel"); // Reference to BPM label
-
-// References to the + and - buttons
+const bpmLabel = document.getElementById("bpmLabel");
 const increaseBPMButton = document.getElementById("increaseBPM");
 const decreaseBPMButton = document.getElementById("decreaseBPM");
 
 let tapTimes = [];
 
-// Preload audio files
-const beatSound1 = new Audio('metronome1.mp3'); // Replace with your sound file path
-const beatSound2 = new Audio('metronome2.mp3'); // Replace with your sound file path
-beatSound1.preload = 'auto';
-beatSound2.preload = 'auto';
+// Initialize AudioContext
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+let beatSoundBuffer1, beatSoundBuffer2;
 
-// Event listener for Maatra input change
+// Function to load audio files using fetch and decode them
+async function loadSound(url) {
+    const response = await fetch(url);
+    const arrayBuffer = await response.arrayBuffer();
+    const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+    return audioBuffer;
+}
+
+// Load both sounds
+async function initializeAudio() {
+    beatSoundBuffer1 = await loadSound('metronome1.mp3'); // First sound file
+    beatSoundBuffer2 = await loadSound('metronome2.mp3'); // Second sound file
+}
+
+// Play sound using AudioBufferSourceNode
+function playSound(buffer) {
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(audioContext.destination);
+    source.start(0);
+}
+
+// Call the function to initialize the audio buffers
+initializeAudio();
+
 maatraInput.addEventListener("change", (e) => {
-    maatra = parseInt(e.target.value, 10) || 12; // Set Maatra from input or default to 12
-    createBubbles(); // Create bubbles based on updated Maatra
+    maatra = parseInt(e.target.value, 10) || 12;
+    createBubbles();
 });
 
-// Event listener for toggle button
-toggleButton.addEventListener("click", () => {
+// Function to handle toggle button click/touch for mobile
+function toggleBeat() {
     if (isPlaying) {
-        stopRequested = true; // Request to stop after the current loop
-        toggleButton.textContent = "START"; // Update button text
-        toggleButton.classList.remove('stop'); // Remove stop class
-        toggleButton.classList.add('start'); // Add start class
+        stopRequested = true;
+        toggleButton.textContent = "START";
+        toggleButton.classList.remove('stop');
+        toggleButton.classList.add('start');
     } else {
-        isPlaying = true; // Start playing
-        stopRequested = false; // Reset stop request
-        toggleButton.textContent = "STOP"; // Update button text
-        toggleButton.classList.remove('start'); // Remove start class
-        toggleButton.classList.add('stop'); // Add stop class
-        startBeat(); // Start the beat
-    }
-});
-
-let soundOn = true; // Variable to track sound status
-
-// Function to toggle sound
-function toggleSound() {
-    soundOn = !soundOn; // Toggle the sound status
-    const soundButton = document.getElementById("soundToggle");
-    soundButton.innerHTML = soundOn ? "<b>Sound ON</b>" : "<b>Sound OFF</b>"; // Change button text
-
-    // Optionally, you can mute or unmute the audio elements here if needed
-    if (soundOn) {
-        document.getElementById("beatSound1").volume = 1; // Set volume to 1 (full volume)
-        document.getElementById("beatSound2").volume = 1; // Set volume to 1 (full volume)
-    } else {
-        document.getElementById("beatSound1").volume = 0; // Mute sound
-        document.getElementById("beatSound2").volume = 0; // Mute sound
+        isPlaying = true;
+        stopRequested = false;
+        toggleButton.textContent = "STOP";
+        toggleButton.classList.remove('start');
+        toggleButton.classList.add('stop');
+        startBeat();
     }
 }
 
-// Add event listener to sound toggle button
-document.getElementById("soundToggle").addEventListener("click", toggleSound);
+// Attach both click and touchstart events for toggleButton
+toggleButton.addEventListener("click", toggleBeat);
+toggleButton.addEventListener("touchstart", toggleBeat); // Added for mobile
 
-// Function to start the beat counter
+let soundOn = true;
+
+function toggleSound() {
+    soundOn = !soundOn;
+    const soundButton = document.getElementById("soundToggle");
+    soundButton.innerHTML = soundOn ? "<b>Sound ON</b>" : "<b>Sound OFF</b>";
+}
+
+// Attach click and touchstart to sound toggle
+document.getElementById("soundToggle").addEventListener("click", toggleSound);
+document.getElementById("soundToggle").addEventListener("touchstart", toggleSound); // Added for mobile
 function startBeat() {
     clearInterval(beatInterval);
-    beatCount = 0; // Start with 0 to display '--'
-    avartanCount = 0; // Reset avartan count
+    beatCount = 0;
+    avartanCount = 0;
     avartanDisplay.textContent = avartanCount;
-
-    // Create bubbles
     createBubbles();
 
-    // Start the beat loop
     beatInterval = setInterval(() => {
-        // Increment beat count
         beatCount++;
 
-        // Play the appropriate sound based on the beat count
-        if (beatCount % maatra === 1) { // Check if the beat count is 1
+        if (beatCount % maatra === 1) {
             if (soundOn) {
-                beatSound1.currentTime = 0; // Reset sound time for the first beat
-                beatSound1.play(); // Play first metronome sound
+                playSound(beatSoundBuffer1); // Play the first sound
             }
         } else {
             if (soundOn) {
-                beatSound2.currentTime = 0; // Reset sound time for the other beats
-                beatSound2.play(); // Play second metronome sound
+                playSound(beatSoundBuffer2); // Play the second sound
             }
         }
 
-        // Update the beat count display and bubbles
         if (beatCount <= maatra) {
-            beatCountDisplay.textContent = beatCount; // Display the beat count (starts from 1)
-            updateBubbles(); // Update bubbles on each beat
+            beatCountDisplay.textContent = beatCount;
+            updateBubbles();
         }
 
-        // Check if we reached the number of beats in an avartan
         if (beatCount > maatra) {
             avartanCount++;
-            avartanDisplay.textContent = avartanCount; // Update avartan display
-            resetBeatCounter(); // Reset beat count for the next avartan
+            avartanDisplay.textContent = avartanCount;
+            resetBeatCounter();
         }
 
-        // Check if stop was requested and it's the first beat in the avartan
-        if (stopRequested && beatCount === 1) {
-            avartanCount++; // Increment avartan count when completing the last cycle before stopping
-            avartanDisplay.textContent = avartanCount; // Update the display
-
-            clearInterval(beatInterval); // Stop after completing the current loop
-            isPlaying = false; // Update the playing state
-            stopRequested = false; // Reset the stop request flag
-            beatCountDisplay.textContent = '--'; // Show '--' when stopped
+        if (stopRequested) {
+            if (beatCount === 1) { // Check if on the first beat of the next cycle
+    
+                avartanDisplay.textContent = avartanCount;
+                clearInterval(beatInterval);
+                isPlaying = false;
+                stopRequested = false;
+                beatCountDisplay.textContent = '--';
+            }
         }
-    }, (60000 / bpm)); // Interval based on BPM
+    }, (60000 / bpm));
 }
-
-// Function to reset the beat counter for the next avartan
 function resetBeatCounter() {
-    beatCount = 1; // Reset beat count to 1 for the next avartan
-    beatCountDisplay.textContent = beatCount; // Display the reset value
-    updateBubbles(); // Update bubbles for the new cycle
-}
-
-// Function to create bubbles based on the number of beats
-function createBubbles() {
-    bubbleContainer.innerHTML = ''; // Clear previous bubbles
+    beatCount = 1;
+    beatCountDisplay.textContent = beatCount;
+    updateBubbles();
+}function createBubbles() {
+    bubbleContainer.innerHTML = '';
     for (let i = 0; i < maatra; i++) {
         const bubble = document.createElement("div");
-        bubble.className = "bubble"; // Add bubble class
+        bubble.className = "bubble";
         bubbleContainer.appendChild(bubble);
     }
 }
-
-// Update the active state of the bubbles
+const defaultBubbleCount = 12; // Set your default number of bubbles here
+let bubbleCount = defaultBubbleCount; // Initialize with the default count
+document.addEventListener('DOMContentLoaded', () => {
+    createBubbles(bubbleCount);
+});
 function updateBubbles() {
     const bubbles = bubbleContainer.getElementsByClassName("bubble");
     if (bubbles.length > 0) {
         for (let i = 0; i < bubbles.length; i++) {
-            if (i === (beatCount - 1)) { // Activate the current beat bubble
+            if (i === (beatCount - 1)) {
                 if (beatCount % maatra === 1) {
-                    bubbles[i].style.backgroundColor = 'green'; // Set the first bubble to green
+                    bubbles[i].style.backgroundColor = 'green';
                 } else {
-                    bubbles[i].style.backgroundColor = '#555'; // Set other bubbles to dark gray
+                    bubbles[i].style.backgroundColor = '#555';
                 }
             } else {
-                bubbles[i].style.backgroundColor = 'rgb(221, 221, 221)'; // Default light gray for inactive bubbles
+                bubbles[i].style.backgroundColor = 'rgb(221, 221, 221)';
             }
         }
     }
 }
 
-// Update BPM when the slider is changed
-bpmInput.addEventListener("input", () => {
-    bpm = parseInt(bpmInput.value, 10); // Get value from slider
-    bpmLabel.textContent = `${bpm} BPM`; // Update BPM label
-    if (isPlaying) {
-        updateBeatInterval(); // Update the beat interval without restarting
-    }
-});
+// Attach both click and touchstart events for BPM buttons
+increaseBPMButton.addEventListener("click", increaseBPM);
+increaseBPMButton.addEventListener("touchstart", increaseBPM); // Added for mobile
 
-// Function to update the beat interval based on current BPM
-function updateBeatInterval() {
-    clearInterval(beatInterval); // Clear the existing interval
-    beatInterval = setInterval(() => {
-        // Increment beat count
-        beatCount++;
+decreaseBPMButton.addEventListener("click", decreaseBPM);
+decreaseBPMButton.addEventListener("touchstart", decreaseBPM); // Added for mobile
 
-        // Play the appropriate sound based on the beat count
-        if (beatCount % maatra === 1) { // Check if the beat count is 1
-            if (soundOn) {
-                beatSound1.currentTime = 0; // Reset sound time for the first beat
-                beatSound1.play(); // Play first metronome sound
-            }
-        } else {
-            if (soundOn) {
-                beatSound2.currentTime = 0; // Reset sound time for the other beats
-                beatSound2.play(); // Play second metronome sound
-            }
-        }
-
-        // Update the beat count display and bubbles
-        if (beatCount <= maatra) {
-            beatCountDisplay.textContent = beatCount; // Display the beat count (starts from 1)
-            updateBubbles(); // Update bubbles on each beat
-        }
-
-        // Check if we reached the number of beats in an avartan
-        if (beatCount > maatra) {
-            avartanCount++;
-            avartanDisplay.textContent = avartanCount; // Update avartan display
-            resetBeatCounter(); // Reset beat count for the next avartan
-        }
-
-        // Check if stop was requested and it's the first beat in the avartan
-        if (stopRequested && beatCount === 1) {
-            avartanCount++; // Increment avartan count when completing the last cycle before stopping
-            avartanDisplay.textContent = avartanCount; // Update the display
-
-            clearInterval(beatInterval); // Stop after completing the current loop
-            isPlaying = false; // Update the playing state
-            stopRequested = false; // Reset the stop request flag
-            beatCountDisplay.textContent = '--'; // Show '--' when stopped
-        }
-    }, (60000 / bpm)); // Interval based on BPM
-}
-
-// Event listeners for the + and - buttons
-increaseBPMButton.addEventListener("click", () => {
+function increaseBPM() {
     bpm++;
-    bpmInput.value = bpm; // Update slider
-    bpmLabel.textContent = `${bpm} BPM`; // Update label
+    bpmInput.value = bpm;
+    bpmLabel.textContent = `${bpm} BPM`;
     if (isPlaying) {
-        updateBeatInterval(); // Update the beat interval without restarting
+        updateBeatInterval();
     }
-});
+}
 
-decreaseBPMButton.addEventListener("click", () => {
-    if (bpm > 1) { // Prevent BPM from going below 1
+function decreaseBPM() {
+    if (bpm > 1) {
         bpm--;
-        bpmInput.value = bpm; // Update slider
-        bpmLabel.textContent = `${bpm} BPM`; // Update label
+        bpmInput.value = bpm;
+        bpmLabel.textContent = `${bpm} BPM`;
         if (isPlaying) {
-            updateBeatInterval(); // Update the beat interval without restarting
+            updateBeatInterval();
         }
     }
-});
+}
 
-// Function to handle tap input
-tapButton.addEventListener("click", () => {
+// Attach both click and touchstart events for tap button
+tapButton.addEventListener("click", tapTempo);
+tapButton.addEventListener("touchstart", tapTempo); // Added for mobile
+
+function tapTempo() {
     const tapTime = Date.now();
     tapTimes.push(tapTime);
     if (tapTimes.length > 1) {
         const interval = tapTimes[tapTimes.length - 1] - tapTimes[tapTimes.length - 2];
         bpm = Math.round(60000 / interval);
-        bpmInput.value = bpm; // Update slider
-        bpmLabel.textContent = `${bpm} BPM`; // Update label
+        bpmInput.value = bpm;
+        bpmLabel.textContent = `${bpm} BPM`;
         if (isPlaying) {
-            updateBeatInterval(); // Update the beat interval without restarting
+            updateBeatInterval();
         }
     }
+}
+
+// Change BPM label to an input field when clicked
+bpmLabel.addEventListener("click", () => {
+    const input = document.createElement("input");
+    input.type = "number"; // Set type to number
+    input.value = bpm; // Set the current BPM value
+    input.style.width = "50px"; // Set width for the input
+    input.style.textAlign = "center"; // Center the text
+    input.style.font = getComputedStyle(bpmLabel).font; // Match font styles
+    input.style.border = "none"; // Remove border for seamless look
+    input.style.backgroundColor = "transparent"; // Transparent background
+    input.style.color = getComputedStyle(bpmLabel).color; // Match text color
+    input.style.outline = "none"; // Remove outline on focus
+
+    // Set a placeholder for visual cue
+    input.placeholder = "BPM";
+
+    // Create a span to hold the BPM text
+    const bpmText = document.createElement("span");
+    bpmText.textContent = " BPM"; // Add BPM text
+    bpmText.style.font = getComputedStyle(bpmLabel).font; // Match font styles
+    bpmText.style.color = getComputedStyle(bpmLabel).color; // Match text color
+
+    // Replace the BPM label with the input field and BPM text
+    bpmLabel.innerHTML = ''; // Clear the label
+    bpmLabel.appendChild(input); // Add the input field
+    bpmLabel.appendChild(bpmText); // Add the BPM text
+    input.focus(); // Focus on the input field
+
+    // Handle when the input loses focus (blur)
+    input.addEventListener("blur", () => {
+        const newBPM = parseInt(input.value, 10); // Get the new BPM value
+        if (!isNaN(newBPM) && newBPM > 0) {
+            bpm = newBPM; // Update the BPM variable
+            bpmLabel.innerHTML = `${bpm} BPM`; // Update the label text
+            bpmInput.value = bpm; // Sync with the BPM input slider
+            if (isPlaying) {
+                updateBeatInterval(); // Update the interval if playing
+            }
+        } else {
+            bpmLabel.innerHTML = `${bpm} BPM`; // Revert to the original value if invalid
+        }
+    });
+
+    // Handle when the Enter key is pressed
+    input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            input.blur(); // Trigger the blur event to save the value
+        }
+    });
 });
+
+// Handle BPM slider changes
+bpmInput.addEventListener("input", () => {
+    bpm = Math.max(30, Math.min(1000, parseInt(bpmInput.value, 10)));// Update BPM from input value
+    bpmLabel.textContent = `${bpm} BPM`; // Update label text
+    if (isPlaying) {
+        updateBeatInterval(); // Update interval if playing
+    }
+});
+
+// Function to update the beat interval
+function updateBeatInterval() {
+    clearInterval(beatInterval); // Clear the existing interval
+    startBeat(); // Restart the beat with the updated BPM
+}

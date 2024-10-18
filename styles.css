@@ -59,10 +59,10 @@ body {
 .slider:before {
     position: absolute;
     content: "";
-    height: 26px; /* Adjusted for a larger circle */
-    width: 26px; /* Adjusted for a larger circle */
+    height: 24px; /* Adjusted for a larger circle */
+    width: 24px; /* Adjusted for a larger circle */
     left: 4px; /* Adjusted to 4px to add padding from the left */
-    bottom: 2px; /* Keep bottom at 2px for vertical centering */
+    bottom: 2.9px; /* Keep bottom at 2px for vertical centering */
     background-color: white;
     border-radius: 50%; /* Round shape */
     transition: .4s;
@@ -152,7 +152,7 @@ input[type="checkbox"]:not(:checked) + .slider .fa-volume-mute {
 .sound-toggle:hover {
     background-color: rgb(114, 172, 81);
     border: 1px solid rgb(114, 172, 81);
-    color: rgb(255, 255, 255); 
+    color: rgb(208, 77, 77); 
 }
 
 .sound-toggle {
@@ -245,6 +245,34 @@ input[type="number"]:focus {
     font-size: 28px;
     font-weight: bold;
 }
+.toggle-butto {
+    background-color: rgb(255, 255, 255) !important; /* Default background color */
+    border: 1px solid rgb(187, 187, 187) !important; /* Border color */
+    border-radius: 4px !important; /* Rounded corners */
+    color: rgb(85, 85, 85) !important; /* Default text color */
+    font-size: 22px !important; /* Font size */
+    height: 40px !important; /* Height */
+    transition: background-color 0.4s, color 0.4s !important; /* Smooth transition for hover effects */
+    cursor: pointer !important; /* Hand cursor on hover */
+    width: 30% !important; /* Width of the button */
+    margin: 8px auto !important; /* Centered margin for spacing */
+    text-align: center !important; /* Center the text inside the button */
+    font-weight: bold !important; /* Bold text */
+}
+
+/* Hover color for the start button */
+.start:hover {
+    background-color: rgb(114, 172, 81) !important; /* Change to your desired hover color */
+    border: 1px solid rgb(114, 172, 81) !important; /* Match border with hover color */
+    color: rgb(255, 255, 255) !important; /* Change text color on hover */
+}
+
+/* Hover color for the stop button */
+.stop:hover {
+    background-color: rgb(208, 77, 77) !important; /* Change to your desired hover color */
+    border: 1px solid rgb(208, 77, 77) !important; /* Match border with hover color */
+    color: rgb(255, 255, 255) !important; /* Change text color on hover */
+}
 
 .play-button, .tap-button {
     background-color: rgb(255, 255, 255); 
@@ -258,7 +286,7 @@ input[type="number"]:focus {
     width: 30%; /* Full width for buttons */
     margin: 8px auto; /* Margin for spacing */
     text-align: center; /* Center the text inside the buttons */
-    font-weight: normal;
+    font-weight: bold;
 }
 
 .play-button:hover {
@@ -300,14 +328,14 @@ button {
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background-color: white;
+    background-color: rgb(223, 221, 221);
     margin: 5px;
     display: inline-block;
     transition: background-color 0.2s ease;
 }
 
 .bubble.active {
-    background-color: green; /* Color for the active bubble */
+    background-color: #72ac51; /* Color for the active bubble */
 }
 
 .bubble:hover {
@@ -354,25 +382,35 @@ input[type="submit"], button {
     appearance: none;
     padding: 15px;
 }
+.bpm-control {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
 .tempo-decrease, .tempo-increase {
     margin-right: 20px;
-    margin-left: 20px;
-    border: 1px solid rgb(204, 204, 204);
+     background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(187, 187, 187);
     border-radius: 20px;
-    color: rgb(51, 51, 51);
-    display: flex;
-    height: 40px;
-    transition: 0.07s;
-    user-select: none;
-    width: 40px; /* Set fixed width for the buttons */
-    background-color: white; /* White background */
+    color: rgb(85, 85, 85);
+    font-size: 20px; /* Font size for buttons */
+    height: 40px; /* Height for buttons */
+    width: 40px; /* Width for buttons */
+    margin: 0 8px; /* Margin for spacing */
     cursor: pointer; /* Hand cursor on hover */
+    transition: background-color 0.4s, color 0.4s; /* Transition effect */
+    font-weight: bold; /* Bold text */
+}
+.tempo-decrease:hover{
+    background-color: rgb(208, 77, 77); /* Background color on hover */
+    color: rgb(255, 255, 255); /* Text color on hover */
+}
+.tempo-increase:hover {
+    background-color: rgb(114, 172, 81); /* Background color on hover */
+    color: rgb(255, 255, 255); /* Text color on hover */
 }
 
-.tempo-decrease:hover, .tempo-increase:hover {
-    background-color: #72ac51; /* Highlight color on hover */
-}
 
 button {
     align-items: center;
@@ -388,14 +426,57 @@ button {
     user-select: none; /* Prevent text selection */
 }
 
-.tempo-label {
-    color: rgb(85, 85, 85);
-    font-size: 32px; /* Font size for the BPM label */
-    padding-top: 10px; /* Padding to space it from the slider */
+#bpmLabel {
+    cursor: pointer; /* Show pointer cursor to indicate clickability */
+    font-size: 24px; /* Adjust font size */
+    font-weight: bold; /* Make text bold */
+    color: rgb(85, 85, 85); /* Text color */
+    margin: 10px; /* Margin for spacing */
 }
 
-@media screen and (max-width: 480px) {
-    .tempo-decrease, .tempo-increase {
-        display: none; /* Hide buttons on small screens */
+#bpmLabel input {
+    width: 50px; /* Fixed width for the input */
+    font-size: 24px; /* Match font size of the label */
+    text-align: center; /* Center the text in the input */
+    border: 2px solid #007bff; /* Add border for visibility */
+    border-radius: 4px; /* Rounded corners */
+    padding: 5px; /* Padding inside the input */
+    outline: none; /* Remove outline on focus */
+}
+
+#bpmLabel input:focus {
+    border-color: #0056b3; /* Change border color on focus */
+    background-color: #f0f8ff; /* Light background color on focus */
+    transition: border-color 0.3s; /* Smooth transition for border color */
+}
+
+
+@media screen and (max-width: 600px) {
+    
+    .play-button, .tap-button {
+        font-size: 18px; /* Adjust font size for smaller screens */
+        height: 45px; /* Slightly increased button height for touch devices */
+        margin: 10px 0; /* Increase margin for easier tapping */
     }
+    .bubble {
+        width: 25px; /* Smaller bubbles for mobile */
+        height: 25px;
+    }
+
+    .bubble-container {
+        gap: 5px; /* Reduce gap between bubbles */
+    }
+    #toggleButton, #tapButton {
+        
+        padding: 18px; /* Adjust padding for larger buttons */
+        margin-bottom: 10px; /* Better spacing for mobile */
+    }
+
+    #bubbleContainer {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+   
+    
 }
