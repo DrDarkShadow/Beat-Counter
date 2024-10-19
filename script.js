@@ -16,6 +16,8 @@ const bpmInput = document.getElementById("bpmSlider");
 const bpmLabel = document.getElementById("bpmLabel");
 const increaseBPMButton = document.getElementById("increaseBPM");
 const decreaseBPMButton = document.getElementById("decreaseBPM");
+const soundToggleButton = document.getElementById("soundToggle");
+soundToggleButton.addEventListener("click", toggleSound);
 
 let tapTimes = [];
 
