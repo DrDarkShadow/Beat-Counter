@@ -7,6 +7,7 @@ let maatra = 6;
 let beatInterval;
 
 const toggleButton = document.getElementById("toggleButton");
+const isMobile = window.matchMedia("(max-width: 768px)").matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const beatCountDisplay = document.getElementById("beatCount");
 const avartanDisplay = document.getElementById("counter");
 const tapButton = document.getElementById("tapButton");
@@ -18,6 +19,8 @@ const increaseBPMButton = document.getElementById("increaseBPM");
 const decreaseBPMButton = document.getElementById("decreaseBPM");
 const soundToggleButton = document.getElementById("soundToggle");
 soundToggleButton.addEventListener("click", toggleSound);
+let bubbleUpdateInterval; // To control the bubble update timing
+
 
 let tapTimes = [];
 
@@ -149,21 +152,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function updateBubbles() {
     const bubbles = bubbleContainer.getElementsByClassName("bubble");
-    if (bubbles.length > 0) {
-        for (let i = 0; i < bubbles.length; i++) {
-            if (i === (beatCount - 1)) {
-                if (beatCount % maatra === 1) {
-                    bubbles[i].style.backgroundColor = 'green';
-                } else {
-                    bubbles[i].style.backgroundColor = '#555';
-                }
-            } else {
-                bubbles[i].style.backgroundColor = 'rgb(221, 221, 221)';
-            }
+
+    if (bubbles.length === 0) return; // If no bubbles, do nothing
+
+    // Calculate the current active bubble based on the beat count
+    let currentIndex = (beatCount - 1) % bubbles.length;
+
+    // Only update the necessary bubble (the active one)
+    Array.from(bubbles).forEach((bubble, index) => {
+        if (index === currentIndex) {
+            // Highlight the active bubble
+            bubble.style.backgroundColor = beatCount % maatra === 1 ? 'green' : '#555'; // First beat green, others grey
+        } else {
+            // Reset other bubbles
+            bubble.style.backgroundColor = 'rgb(221, 221, 221)';
         }
-    }
+    });
 }
 
+// Use requestAnimationFrame for smoother updates
+function startBubbleAnimation() {
+    if (bubbleUpdateInterval) {
+        clearInterval(bubbleUpdateInterval); // Clear previous intervals
+    }
+
+    bubbleUpdateInterval = setInterval(() => {
+        requestAnimationFrame(updateBubbles); // Smoother animation with requestAnimationFrame
+    }, 500); // Sync with beat duration, adjust interval as needed
+}
+// Call createBubbles to initialize the bubbles and start the animation loop
+createBubbles();
+startBubbleAnimation();
 // Attach click events for BPM buttons
 increaseBPMButton.addEventListener("click", increaseBPM);
 decreaseBPMButton.addEventListener("click", decreaseBPM);

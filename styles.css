@@ -345,7 +345,7 @@ input[type="number"] {
     background-color: rgb(223, 221, 221);
     margin: 5px;
     display: inline-block;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.3s ease;
 }
 
 .bubble.active {
