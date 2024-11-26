@@ -7,6 +7,7 @@ let maatra = 12;
 let beatInterval;
 
 const toggleButton = document.getElementById("toggleButton");
+const isMobile = window.matchMedia("(max-width: 768px)").matches || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 const beatCountDisplay = document.getElementById("beatCount");
 const avartanDisplay = document.getElementById("counter");
 const tapButton = document.getElementById("tapButton");
@@ -17,6 +18,10 @@ const bpmLabel = document.getElementById("bpmLabel");
 
 const increaseBPMButton = document.getElementById("increaseBPM");
 const decreaseBPMButton = document.getElementById("decreaseBPM");
+const soundToggleButton = document.getElementById("soundToggle");
+soundToggleButton.addEventListener("click", toggleSound);
+let bubbleUpdateInterval; // To control the bubble update timing
+
 
 let tapTimes = [];
 
@@ -132,11 +137,10 @@ function executeBeat() {
         }
     }
 
-    // Update beat counter and bubble visuals
-    if (beatCount <= maatra) {
-        beatCountDisplay.textContent = beatCount;
-        updateBubbles();
-    }
+        if (beatCount <= maatra) {
+            beatCountDisplay.textContent = beatCount;
+            updateBubbles();
+        }
 
     // Handle avartan increment
     if (beatCount > maatra) {
